@@ -321,7 +321,7 @@ def get_elbo(counts,
       loc=0., 
       scale=1.)
   ideal_point_log_prior = tf.reduce_sum(
-      ideal_point_log_prior.log_prob(ideal_point_samples), axis=1)
+      ideal_point_log_prior.log_prob(ideal_point_samples), axis=[1,2])
 
   document_log_prior = get_log_prior(document_samples, 'gamma')
   objective_topic_log_prior = get_log_prior(objective_topic_samples, 'gamma')
@@ -340,7 +340,8 @@ def get_elbo(counts,
                                     axis=1)
     
   selected_ideological_topic_samples = tf.exp(
-      selected_ideal_points[:, :, tf.newaxis, tf.newaxis] *
+   # replace by a column
+      selected_ideal_points[:, :, :, tf.newaxis] *
       ideological_topic_samples[:, tf.newaxis, :, :])
   # Normalize by how lengthy the author's opinion is.
   selected_author_weights = tf.gather(author_weights, author_indices)
