@@ -342,7 +342,7 @@ def get_elbo(counts,
   selected_ideological_topic_samples = tf.exp(
    # replace by a column
       selected_ideal_points[:, :, 1, tf.newaxis] *
-      ideological_topic_samples[:, tf.newaxis, :, :]) +
+      ideological_topic_samples[:, tf.newaxis, :, :] +
       selected_ideal_points[:, :, 2, tf.newaxis] *
       ideological_topic_samples[:, tf.newaxis, :, :])  
   # Normalize by how lengthy the author's opinion is.
