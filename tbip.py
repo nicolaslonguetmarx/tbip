@@ -106,7 +106,8 @@ def build_input_pipeline(data_dir,
   num_authors = np.max(author_indices + 1)
   author_map = np.loadtxt(os.path.join(data_dir, "author_map.txt"),
                           dtype=str, 
-                          delimiter="\n")
+                          delimiter="\n",
+                          encoding='latin-1')
   # Shuffle data.
   documents = random_state.permutation(num_documents)
   shuffled_author_indices = author_indices[documents]
