@@ -536,6 +536,14 @@ def main(argv):
                    ideological_topic_loc +
                    (objective_topic_scale ** 2 + 
                     ideological_topic_scale ** 2) / 2)
+  positive_mean_at_two = (objective_topic_loc + 
+                   2*ideological_topic_loc + 
+                   (objective_topic_scale ** 2 + 
+                    2*ideological_topic_scale ** 2) / 2)
+  negative_mean_at_two = (objective_topic_loc - 
+                   2*ideological_topic_loc +
+                   (objective_topic_scale ** 2 + 
+                    2*ideological_topic_scale ** 2) / 2)
   
   topics = tf.py_func(
       functools.partial(print_topics, vocabulary=vocabulary),
