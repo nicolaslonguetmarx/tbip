@@ -518,7 +518,8 @@ class TBIP(tf.keras.Model):
       axis=0)
     expected_ideological_term = tf.exp(
       self.ideological_topic_distribution.location[tf.newaxis, :, :] * 
-      ideal_point_loc[:, tf.newaxis, tf.newaxis] + 
+      #nlm: here no tf.newaxis for second axis. 
+      ideal_point_loc[:, :, tf.newaxis] + 
       author_verbosity_loc[:, tf.newaxis, tf.newaxis])
     return expected_ideological_term
   
