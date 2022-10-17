@@ -738,8 +738,8 @@ class TBIP(tf.keras.Model):
     return negative_mean, neutral_mean, positive_mean
 
   def get_document_means(self):
-    document_shape_np = self.model.document_distribution.shape
-    document_rate_np = self.model.document_distribution.rate
+    document_shape_np = self.document_distribution.shape
+    document_rate_np = self.document_distribution.rate
     document_mean = np.divide(document_shape_np, document_rate_np)
     return document_mean
 
