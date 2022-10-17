@@ -738,12 +738,12 @@ class TBIP(tf.keras.Model):
     return negative_mean, neutral_mean, positive_mean
 
   def get_document_means(self):
-      document_shape_np = self.document_shape
-      document_rate_np = self.document_rate
-      document_mean = np.divide(document_shape_np, document_rate_np)
-      return document_mean
+    document_shape_np = self.document_shape
+    document_rate_np = self.document_rate
+    document_mean = np.divide(document_shape_np, document_rate_np)
+    return document_mean
 
-def call(self, inputs, seed):
+  def call(self, inputs, seed):
     """Approximate terms in the ELBO with Monte-Carlo samples.
     
     Args:
