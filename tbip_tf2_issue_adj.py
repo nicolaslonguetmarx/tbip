@@ -517,8 +517,7 @@ class TBIP(tf.keras.Model):
                                       author_indices,
                                       axis=1)
     print("selected issue adjustment")
-    assert tf.math.is_nan(selected_issue_adjustment)==False
-    
+    tf.print(selected_issue_adjustment, message="This is selected adjusmtnet ")
     selected_author_verbosities = tf.gather(author_verbosity_samples,
                                             author_indices,
                                             axis=1)
