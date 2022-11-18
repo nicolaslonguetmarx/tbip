@@ -431,6 +431,8 @@ class TBIP(tf.keras.Model):
         ideological_topic_samples))
     ideal_point_entropy = self.ideal_point_distribution.get_entropy(
       ideal_point_samples)
+    print("the issue adjustment entropy from get_entropy is ")
+    tf.print(ideal_point_entropy)
     issue_adjustment_entropy = self.issue_adjustment_distribution.get_entropy(
       issue_adjustment_samples)
     print("the issue adjustment entropy from get_entropy is ")
