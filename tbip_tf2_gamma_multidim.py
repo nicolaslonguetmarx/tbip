@@ -402,8 +402,6 @@ class TBIP(tf.keras.Model):
         ideological_topic_samples))
     ideal_point_entropy = self.ideal_point_distribution.get_entropy(
       ideal_point_samples)
-    print("ideal point entropy")
-    tf.print(ideal_point_entropy)
     author_verbosity_entropy = self.author_verbosity_distribution.get_entropy(
       author_verbosity_samples)
     entropy = (document_entropy +
@@ -411,8 +409,6 @@ class TBIP(tf.keras.Model):
                ideological_topic_entropy +
                ideal_point_entropy +
                author_verbosity_entropy)
-    print("overall entropy")
-    tf.print(entropy)
     return entropy
 
   def get_samples(self, seed=None):
