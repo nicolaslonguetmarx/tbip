@@ -433,7 +433,8 @@ class TBIP(tf.keras.Model):
       ideal_point_samples)
     issue_adjustment_entropy = self.issue_adjustment_distribution.get_entropy(
       issue_adjustment_samples)
-    print("the issue adjustment entropy from get_entropy is "+str(issue_adjustment_entropy), flush = True)
+    print("the issue adjustment entropy from get_entropy is ")
+    tf.print(issue_adjustment_entropy)
     author_verbosity_entropy = self.author_verbosity_distribution.get_entropy(
       author_verbosity_samples)
     entropy = (document_entropy +
@@ -442,7 +443,8 @@ class TBIP(tf.keras.Model):
                ideal_point_entropy +
                issue_adjustment_entropy + 
                author_verbosity_entropy)
-    print("The entropy from get_entropy is "+str(entropy), flush = True)
+    print("The entropy from get_entropy is ")
+    tf.print(entropy)
     return entropy
 
   def get_samples(self, seed=None):
