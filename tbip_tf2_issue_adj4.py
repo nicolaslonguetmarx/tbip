@@ -770,6 +770,7 @@ class TBIP(tf.keras.Model):
       negative_mean = ((objective_topic_shape / objective_topic_rate) * np.exp(
                        -ideological_topic_loc +
                        (ideological_topic_scale ** 2) / 2))
+      return negative_mean, neutral_mean, positive_mean, objective_topic_rate, objective_topic_shape, ideological_topic_loc, ideological_topic_scale
     elif self.positive_variational_family == 'lognormal':
       objective_topic_loc = self.objective_topic_distribution.location
       objective_topic_scale = self.objective_topic_distribution.scale
@@ -782,7 +783,7 @@ class TBIP(tf.keras.Model):
                        ideological_topic_loc +
                        (objective_topic_scale ** 2 +
                         ideological_topic_scale ** 2) / 2)
-    return negative_mean, neutral_mean, positive_mean, objective_topic_rate, objective_topic_shape, ideological_topic_loc, ideological_topic_scale
+      return negative_mean, neutral_mean, positive_mean, objective_topic_scale, objective_topic_loc, ideological_topic_loc, ideological_topic_scale
 
   def get_document_means(self):
     document_shape_np = self.document_distribution.shape
