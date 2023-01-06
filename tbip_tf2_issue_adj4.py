@@ -679,6 +679,8 @@ class TBIP(tf.keras.Model):
     expected_document = document_shape / document_rate
     updated_objective_topic_rate = 0.3 + minibatch_scaling * tf.reduce_sum(
       expected_document[..., tf.newaxis] * expected_ideological_term, 0)
+    # we clip the objective_topic_rate 
+    updated_objective_topic_rate = tf.clip_by_value(updated_objective_topic_rate, 0, 1000)
     return updated_objective_topic_shape, updated_objective_topic_rate
   
   def perform_cavi_updates(self, inputs, outputs, step):
