@@ -459,7 +459,7 @@ class TBIP(tf.keras.Model):
       self.num_samples, seed=seed)
     
     # let's clip the issue adjustment between -5 and 5 
-    issue_adjustment_samples = tf.clip_by_value(issue_adjustment_samples, -2, 2)
+    issue_adjustment_samples = tf.clip_by_value(issue_adjustment_samples, -5, 5)
     samples = [document_samples, objective_topic_samples,
                ideological_topic_samples, ideal_point_samples,
                issue_adjustment_samples, author_verbosity_samples]
@@ -559,6 +559,9 @@ class TBIP(tf.keras.Model):
     issue_adjustment_loc = tf.gather(self.issue_adjustment_distribution.location, 
                                 author_indices, 
                                 axis=0)
+
+    issue_adjustment_loc  = tf.clip_by_value(issue_adjustment_loc, -5, 5) 
+
     author_verbosity_loc = tf.gather(
       self.author_verbosity_distribution.location, 
       author_indices, 
@@ -680,7 +683,8 @@ class TBIP(tf.keras.Model):
     updated_objective_topic_rate = 0.3 + minibatch_scaling * tf.reduce_sum(
       expected_document[..., tf.newaxis] * expected_ideological_term, 0)
     # we clip the objective_topic_rate 
-    updated_objective_topic_rate = tf.clip_by_value(updated_objective_topic_rate, 0, 1000)
+    #updated_objective_topic_rate = tf.clip_by_value(updated_objective_topic_rate, 0, 1000)
+
     return updated_objective_topic_shape, updated_objective_topic_rate
   
   def perform_cavi_updates(self, inputs, outputs, step):
