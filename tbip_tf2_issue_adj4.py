@@ -562,7 +562,7 @@ class TBIP(tf.keras.Model):
     
     
     
-    issue_adjustment_loc = tf.clip_by_value(issue_adjustment_loc, -2, 2)
+    issue_adjustment_loc = tf.clip_by_value(issue_adjustment_loc, -0.5, 0.5)
     
     author_verbosity_loc = tf.gather(
       self.author_verbosity_distribution.location, 
