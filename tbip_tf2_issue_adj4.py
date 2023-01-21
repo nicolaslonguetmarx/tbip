@@ -459,7 +459,7 @@ class TBIP(tf.keras.Model):
       self.num_samples, seed=seed)
     
     # let's clip the issue adjustment between -5 and 5 
-    issue_adjustment_samples = tf.clip_by_value(issue_adjustment_samples, -2, 2)
+    issue_adjustment_samples = tf.clip_by_value(issue_adjustment_samples, -0.5, 0.5)
     samples = [document_samples, objective_topic_samples,
                ideological_topic_samples, ideal_point_samples,
                issue_adjustment_samples, author_verbosity_samples]
@@ -745,6 +745,12 @@ class TBIP(tf.keras.Model):
     self.objective_topic_distribution.shape.assign(
       global_objective_topic_shape)
     self.objective_topic_distribution.rate.assign(global_objective_topic_rate)
+
+
+    # update the clipped issue_adjustment 
+    all_issue_adjustement_loc = self.issue_adjustment_distribution.location
+    all_issue_adjustement_loc = tf.clip_by_value(all_issue_adjustement_loc, -5, 5)
+    self.issue_adjustment_distribution.location.assign(all_issue_adjustement_loc)
 
   def get_topic_means(self):
     """Get neutral and ideological topics from variational parameters.
