@@ -751,6 +751,10 @@ class TBIP(tf.keras.Model):
     all_issue_adjustement_loc = self.issue_adjustment_distribution.location
     all_issue_adjustement_loc = tf.clip_by_value(all_issue_adjustement_loc, -5, 5)
     self.issue_adjustment_distribution.location.assign(all_issue_adjustement_loc)
+    print("max of list trimmed") 
+    print(all_issue_adjustement_loc.numpy().max())
+    print("max of tensor")
+    print(self.issue_adjustment_distribution.location.numpy().max())
 
   def get_topic_means(self):
     """Get neutral and ideological topics from variational parameters.
