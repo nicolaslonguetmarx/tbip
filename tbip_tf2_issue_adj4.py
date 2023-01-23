@@ -747,11 +747,7 @@ class TBIP(tf.keras.Model):
     self.objective_topic_distribution.rate.assign(global_objective_topic_rate)
 
 
-    # update the clipped issue_adjustment 
-    all_issue_adjustement_loc = self.issue_adjustment_distribution.location
-    all_issue_adjustement_loc = tf.clip_by_value(all_issue_adjustement_loc, -1, 1)
-    self.issue_adjustment_distribution.location.assign(all_issue_adjustement_loc)
-    assert self.issue_adjustment_distribution.location.numpy.max()<=1
+    
 
 
   def get_topic_means(self):
@@ -1093,6 +1089,12 @@ def main(argv):
        log_prior_loss, entropy_loss, seed) = train_step(
           model, inputs, outputs, optim, seed, tf.constant(step))
       checkpoint.seed.assign(seed)
+    
+      # update the clipped issue_adjustment 
+      all_issue_adjustement_loc = self.issue_adjustment_distribution.location
+      all_issue_adjustement_loc = tf.clip_by_value(all_issue_adjustement_loc, -1, 1)
+      self.issue_adjustment_distribution.location.assign(all_issue_adjustement_loc)
+      assert self.issue_adjustment_distribution.location.numpy.max()<=1
 
     sec_per_step = (time.time() - start_time) / (step + 1)
     sec_per_epoch = (time.time() - start_time) / (epoch - start_epoch)
