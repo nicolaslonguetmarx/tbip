@@ -749,9 +749,9 @@ class TBIP(tf.keras.Model):
 
     # update the clipped issue_adjustment 
     all_issue_adjustement_loc = self.issue_adjustment_distribution.location
-    all_issue_adjustement_loc = tf.clip_by_value(all_issue_adjustement_loc, -5, 5)
+    all_issue_adjustement_loc = tf.clip_by_value(all_issue_adjustement_loc, -1, 1)
     self.issue_adjustment_distribution.location.assign(all_issue_adjustement_loc)
-    assert self.issue_adjustment_distribution.location.numpy.max()<=5
+    assert self.issue_adjustment_distribution.location.numpy.max()<=1
 
 
   def get_topic_means(self):
