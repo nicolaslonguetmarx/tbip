@@ -256,7 +256,7 @@ class VariationalFamily(tf.keras.layers.Layer):
                               axis=tuple(range(1, len(samples.shape))))
     return log_prior
 
-  def get_entropy(self, samples):
+  def get_entropy_inner(self, samples):
     """Compute entropy of samples from variational distribution."""
     # Sum all but first axis.
     entropy = -tf.reduce_sum(self.distribution.log_prob(samples),
