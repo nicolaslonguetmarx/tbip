@@ -413,7 +413,7 @@ class TBIP(tf.keras.Model):
         distribution. A tensor with shape [num_samples, num_topics, num_words].
       ideal_point_samples: Samples from the ideal point variational
         distribution. A tensor with shape [num_samples, num_authors].
-      issue_adjustment_samples: Samples from the ideal point variational 
+      issue_adjustment_samples: Samples from the issue adjustment variational 
           distribution. A tensor with shape [num_samples, num_authors, nuum_topics].
       author_verbosity_samples: Samples from the author verbosity variational
         distribution. A tensor with shape [num_samples, num_authors].
@@ -442,7 +442,7 @@ class TBIP(tf.keras.Model):
                issue_adjustment_entropy + 
                author_verbosity_entropy)
     return entropy
-
+  
   def get_samples(self, seed=None):
     """Get samples from variational families."""
     document_samples, seed = self.document_distribution.sample(
@@ -459,7 +459,7 @@ class TBIP(tf.keras.Model):
       self.num_samples, seed=seed)
     
     # let's clip the issue adjustment between -5 and 5 
-    issue_adjustment_samples = tf.clip_by_value(issue_adjustment_samples, -0.5, 0.5)
+    #issue_adjustment_samples = tf.clip_by_value(issue_adjustment_samples, -0.5, 0.5)
     samples = [document_samples, objective_topic_samples,
                ideological_topic_samples, ideal_point_samples,
                issue_adjustment_samples, author_verbosity_samples]
@@ -562,7 +562,7 @@ class TBIP(tf.keras.Model):
     
     
     
-    issue_adjustment_loc = tf.clip_by_value(issue_adjustment_loc, -0.5, 0.5)
+    #issue_adjustment_loc = tf.clip_by_value(issue_adjustment_loc, -0.5, 0.5)
     
     author_verbosity_loc = tf.gather(
       self.author_verbosity_distribution.location, 
@@ -979,7 +979,7 @@ def train_step(model, inputs, outputs, optim, seed, step=None):
     trainable_variables = trainable_variables[4:]
   grads = tape.gradient(total_loss, trainable_variables)
   optim.apply_gradients(zip(grads, trainable_variables))
-  return total_loss, reconstruction_loss, log_prior_loss, entropy_loss, seed
+  return total_loss, reconstruction_loss, log_prior_loss, entropy_loss, seed, 
 
 
 def main(argv):
@@ -1091,10 +1091,10 @@ def main(argv):
       checkpoint.seed.assign(seed)
     
       # update the clipped issue_adjustment 
-      all_issue_adjustement_loc = self.issue_adjustment_distribution.location
-      all_issue_adjustement_loc = tf.clip_by_value(all_issue_adjustement_loc, -1, 1)
-      self.issue_adjustment_distribution.location.assign(all_issue_adjustement_loc)
-      assert self.issue_adjustment_distribution.location.numpy.max()<=1
+      #all_issue_adjustement_loc = self.issue_adjustment_distribution.location
+      #all_issue_adjustement_loc = tf.clip_by_value(all_issue_adjustement_loc, -1, 1)
+      #self.issue_adjustment_distribution.location.assign(all_issue_adjustement_loc)
+      #assert self.issue_adjustment_distribution.location.numpy.max()<=1
 
     sec_per_step = (time.time() - start_time) / (step + 1)
     sec_per_epoch = (time.time() - start_time) / (epoch - start_epoch)
