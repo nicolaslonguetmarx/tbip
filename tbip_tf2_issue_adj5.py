@@ -979,7 +979,7 @@ def train_step(model, inputs, outputs, optim, seed, step=None):
     trainable_variables = trainable_variables[4:]
   grads = tape.gradient(total_loss, trainable_variables)
   optim.apply_gradients(zip(grads, trainable_variables))
-  return total_loss, reconstruction_loss, log_prior_loss, entropy_loss, seed, 
+  return total_loss, reconstruction_loss, log_prior_loss, entropy_loss, seed
 
 
 def main(argv):
