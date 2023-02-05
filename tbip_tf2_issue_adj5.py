@@ -458,8 +458,8 @@ class TBIP(tf.keras.Model):
     author_verbosity_samples, seed = self.author_verbosity_distribution.sample(
       self.num_samples, seed=seed)
     
-    # let's clip the issue adjustment between -5 and 5
-    issue_adjustment_samples = tf.clip_by_value(issue_adjustment_samples, -5, 5)
+    # let's clip the issue adjustment between -3 and 3
+    issue_adjustment_samples = tf.clip_by_value(issue_adjustment_samples, -3, 3)
     samples = [document_samples, objective_topic_samples,
                ideological_topic_samples, ideal_point_samples,
                issue_adjustment_samples, author_verbosity_samples]
