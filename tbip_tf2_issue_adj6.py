@@ -122,7 +122,7 @@ def build_input_pipeline(data_dir,
       files inside the rep: `counts.npz`, `author_indices.npy`,
       `author_map.txt`, and `vocabulary.txt`.
     batch_size: The batch size to use for training.
-    random_state: A NumPy `RandomState` object, used to shuffle the data.x
+    random_state: A NumPy `RandomState` object, used to shuffle the data.
     counts_transformation: A string indicating how to transform the counts.
       One of "nothing" or "log".
   """
@@ -256,7 +256,7 @@ class VariationalFamily(tf.keras.layers.Layer):
                               axis=tuple(range(1, len(samples.shape))))
     return log_prior
 
-  def get_entropy(self, samples):
+  def get_entropy_inner(self, samples):
     """Compute entropy of samples from variational distribution."""
     # Sum all but first axis.
     entropy = -tf.reduce_sum(self.distribution.log_prob(samples),
@@ -413,7 +413,7 @@ class TBIP(tf.keras.Model):
         distribution. A tensor with shape [num_samples, num_topics, num_words].
       ideal_point_samples: Samples from the ideal point variational
         distribution. A tensor with shape [num_samples, num_authors].
-      issue_adjustment_samples: Samples from the ideal point variational 
+      issue_adjustment_samples: Samples from the issue adjustment variational 
           distribution. A tensor with shape [num_samples, num_authors, nuum_topics].
       author_verbosity_samples: Samples from the author verbosity variational
         distribution. A tensor with shape [num_samples, num_authors].
@@ -422,18 +422,18 @@ class TBIP(tf.keras.Model):
       entropy: Monte-Carlo estimate of the entropy. A tensor with shape
         [num_samples].
     """
-    document_entropy = self.document_distribution.get_entropy(
+    document_entropy = self.document_distribution.get_entropy_inner(
       document_samples)
     objective_topic_entropy = (
-      self.objective_topic_distribution.get_entropy(objective_topic_samples))
+      self.objective_topic_distribution.get_entropy_inner(objective_topic_samples))
     ideological_topic_entropy = (
-      self.ideological_topic_distribution.get_entropy(
+      self.ideological_topic_distribution.get_entropy_inner(
         ideological_topic_samples))
-    ideal_point_entropy = self.ideal_point_distribution.get_entropy(
+    ideal_point_entropy = self.ideal_point_distribution.get_entropy_inner(
       ideal_point_samples)
-    issue_adjustment_entropy = self.issue_adjustment_distribution.get_entropy(
+    issue_adjustment_entropy = self.issue_adjustment_distribution.get_entropy_inner(
       issue_adjustment_samples)
-    author_verbosity_entropy = self.author_verbosity_distribution.get_entropy(
+    author_verbosity_entropy = self.author_verbosity_distribution.get_entropy_inner(
       author_verbosity_samples)
     entropy = (document_entropy +
                objective_topic_entropy +
@@ -442,7 +442,7 @@ class TBIP(tf.keras.Model):
                issue_adjustment_entropy + 
                author_verbosity_entropy)
     return entropy
-
+  
   def get_samples(self, seed=None):
     """Get samples from variational families."""
     document_samples, seed = self.document_distribution.sample(
@@ -458,8 +458,8 @@ class TBIP(tf.keras.Model):
     author_verbosity_samples, seed = self.author_verbosity_distribution.sample(
       self.num_samples, seed=seed)
     
-    # let's clip the issue adjustment between -5 and 5 
-    issue_adjustment_samples = tf.clip_by_value(issue_adjustment_samples, -5, 5)
+    # let's clip the issue adjustment between -3 and 3
+    issue_adjustment_samples = tf.clip_by_value(issue_adjustment_samples, -3, 3)
     samples = [document_samples, objective_topic_samples,
                ideological_topic_samples, ideal_point_samples,
                issue_adjustment_samples, author_verbosity_samples]
@@ -562,7 +562,7 @@ class TBIP(tf.keras.Model):
     
     
     
-    issue_adjustment_loc = tf.clip_by_value(issue_adjustment_loc, -5, 5)
+    # issue_adjustment_loc = tf.clip_by_value(issue_adjustment_loc, -1, 1)
     
     author_verbosity_loc = tf.gather(
       self.author_verbosity_distribution.location, 
@@ -745,6 +745,10 @@ class TBIP(tf.keras.Model):
     self.objective_topic_distribution.shape.assign(
       global_objective_topic_shape)
     self.objective_topic_distribution.rate.assign(global_objective_topic_rate)
+
+
+    
+
 
   def get_topic_means(self):
     """Get neutral and ideological topics from variational parameters.
@@ -955,9 +959,7 @@ def train_step(model, inputs, outputs, optim, seed, step=None):
     model.perform_cavi_updates(inputs, outputs, step)
   with tf.GradientTape() as tape:
     predictions, log_prior_loss, entropy_loss, seed = model(inputs, seed)
-    
     count_distribution = tfp.distributions.Poisson(rate=predictions)
-    # estimate the log likelihood at the outputs words
     count_log_likelihood = count_distribution.log_prob(
       tf.sparse.to_dense(outputs))
     count_log_likelihood = tf.reduce_sum(count_log_likelihood, axis=[1, 2])
@@ -1087,6 +1089,12 @@ def main(argv):
        log_prior_loss, entropy_loss, seed) = train_step(
           model, inputs, outputs, optim, seed, tf.constant(step))
       checkpoint.seed.assign(seed)
+    
+      # # update the clipped issue_adjustment 
+      # all_issue_adjustement_loc = self.issue_adjustment_distribution.location
+      # all_issue_adjustement_loc = tf.clip_by_value(all_issue_adjustement_loc, -1, 1)
+      # self.issue_adjustment_distribution.location.assign(all_issue_adjustement_loc)
+      # assert self.issue_adjustment_distribution.location.numpy.max()<=1
 
     sec_per_step = (time.time() - start_time) / (step + 1)
     sec_per_epoch = (time.time() - start_time) / (epoch - start_epoch)
