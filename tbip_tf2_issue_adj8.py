@@ -554,11 +554,7 @@ class TBIP(tf.keras.Model):
     # issue_adjustment_loc = tf.gather(self.issue_adjustment_distribution.location, 
     #                             author_indices, 
     #                             axis=0)
-    
-    
-    
     # issue_adjustment_loc = tf.clip_by_value(issue_adjustment_loc, -1, 1)
-    
     author_verbosity_loc = tf.gather(
       self.author_verbosity_distribution.location, 
       author_indices, 
@@ -567,7 +563,7 @@ class TBIP(tf.keras.Model):
       self.ideological_topic_distribution.location[tf.newaxis, :, :] * 
       #nlm: here no need for tf.newaxis for second axis if multidimensional. 
       (ideal_point_loc[:,tf.newaxis, tf.newaxis] + 
-      author_verbosity_loc[:, tf.newaxis, tf.newaxis])
+      author_verbosity_loc[:, tf.newaxis, tf.newaxis]))
     return expected_ideological_term
   
   def get_cavi_auxiliary_proportions(self, 
