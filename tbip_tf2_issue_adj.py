@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Tue Nov 15 16:21:50 2022
 
@@ -459,7 +458,7 @@ class TBIP(tf.keras.Model):
       self.num_samples, seed=seed)
     
     # let's clip the issue adjustment between -5 and 5 
-    issue_adjustment_samples = tf.clip_by_value(issue_adjustment_samples, -5, 5)
+    # issue_adjustment_samples = tf.clip_by_value(issue_adjustment_samples, -5, 5)
     samples = [document_samples, objective_topic_samples,
                ideological_topic_samples, ideal_point_samples,
                issue_adjustment_samples, author_verbosity_samples]
