@@ -515,7 +515,7 @@ class TBIP(tf.keras.Model):
     # Compute ideological term, adding the per-author verbosity scaling.
     # replace with a column
     selected_ideological_topic_samples = tf.exp(
-      (selected_ideal_points[:, :, tf.newaxis, tf.newaxis])*
+      selected_ideal_points[:, :, tf.newaxis, tf.newaxis] *
       ideological_topic_samples[:, tf.newaxis, :, :] + (
         selected_author_verbosities[:, :, tf.newaxis, tf.newaxis]))
     rate = tf.reduce_sum(
@@ -562,8 +562,8 @@ class TBIP(tf.keras.Model):
     expected_ideological_term = tf.exp(
       self.ideological_topic_distribution.location[tf.newaxis, :, :] * 
       #nlm: here no need for tf.newaxis for second axis if multidimensional. 
-      (ideal_point_loc[:,tf.newaxis, tf.newaxis] + 
-      author_verbosity_loc[:, tf.newaxis, tf.newaxis]))
+      ideal_point_loc[:, tf.newaxis, tf.newaxis] + 
+      author_verbosity_loc[:, tf.newaxis, tf.newaxis])
     return expected_ideological_term
   
   def get_cavi_auxiliary_proportions(self, 
@@ -772,7 +772,7 @@ class TBIP(tf.keras.Model):
       negative_mean = ((objective_topic_shape / objective_topic_rate) * np.exp(
                        -ideological_topic_loc +
                        (ideological_topic_scale ** 2) / 2))
-      return negative_mean, neutral_mean, positive_mean, objective_topic_rate, objective_topic_shape, ideological_topic_loc, ideological_topic_scale
+      # return negative_mean, neutral_mean, positive_mean, objective_topic_rate, objective_topic_shape, ideological_topic_loc, ideological_topic_scale
     elif self.positive_variational_family == 'lognormal':
       objective_topic_loc = self.objective_topic_distribution.location
       objective_topic_scale = self.objective_topic_distribution.scale
@@ -785,13 +785,13 @@ class TBIP(tf.keras.Model):
                        ideological_topic_loc +
                        (objective_topic_scale ** 2 +
                         ideological_topic_scale ** 2) / 2)
-      return negative_mean, neutral_mean, positive_mean, objective_topic_scale, objective_topic_loc, ideological_topic_loc, ideological_topic_scale
+    return negative_mean, neutral_mean, positive_mean
 
-  def get_document_means(self):
-    document_shape_np = self.document_distribution.shape
-    document_rate_np = self.document_distribution.rate
-    document_mean = np.divide(document_shape_np, document_rate_np)
-    return document_mean
+  # def get_document_means(self):
+  #   document_shape_np = self.document_distribution.shape
+  #   document_rate_np = self.document_distribution.rate
+  #   document_mean = np.divide(document_shape_np, document_rate_np)
+  #   return document_mean
 
   def call(self, inputs, seed):
     """Approximate terms in the ELBO with Monte-Carlo samples.
