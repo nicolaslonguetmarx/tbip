@@ -256,7 +256,7 @@ class VariationalFamily(tf.keras.layers.Layer):
                               axis=tuple(range(1, len(samples.shape))))
     return log_prior
 
-  def get_entropy_inner(self, samples):
+  def get_entropy(self, samples):
     """Compute entropy of samples from variational distribution."""
     # Sum all but first axis.
     entropy = -tf.reduce_sum(self.distribution.log_prob(samples),
@@ -419,18 +419,18 @@ class TBIP(tf.keras.Model):
       entropy: Monte-Carlo estimate of the entropy. A tensor with shape
         [num_samples].
     """
-    document_entropy = self.document_distribution.get_entropy_inner(
+    document_entropy = self.document_distribution.get_entropy(
       document_samples)
     objective_topic_entropy = (
-      self.objective_topic_distribution.get_entropy_inner(objective_topic_samples))
+      self.objective_topic_distribution.get_entropy(objective_topic_samples))
     ideological_topic_entropy = (
-      self.ideological_topic_distribution.get_entropy_inner(
+      self.ideological_topic_distribution.get_entropy(
         ideological_topic_samples))
-    ideal_point_entropy = self.ideal_point_distribution.get_entropy_inner(
+    ideal_point_entropy = self.ideal_point_distribution.get_entropy(
       ideal_point_samples)
     # issue_adjustment_entropy = self.issue_adjustment_distribution.get_entropy_inner(
     #   issue_adjustment_samples)
-    author_verbosity_entropy = self.author_verbosity_distribution.get_entropy_inner(
+    author_verbosity_entropy = self.author_verbosity_distribution.get_entropy(
       author_verbosity_samples)
     entropy = (document_entropy +
                objective_topic_entropy +
