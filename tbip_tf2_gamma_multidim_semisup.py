@@ -122,6 +122,8 @@ def build_input_pipeline(data_dir,
   num_documents, num_words = counts.shape
   author_indices = np.load(
     os.path.join(data_dir, "author_indices.npy")).astype(np.int32)
+  initial_ideal_points = np.load(
+    os.path.join(data_dir, "initial_ideal_points.npy")).astype(np.int32)
   author_map = np.loadtxt(os.path.join(data_dir, "author_map.txt"),
                           dtype=str,
                           delimiter="\n")
