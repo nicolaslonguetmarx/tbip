@@ -159,6 +159,7 @@ class VariationalFamily(tf.keras.layers.Layer):
   def __init__(self, 
                family, 
                shape, 
+               initial_ideal_points,
                fitted_shape=None, 
                fitted_rate=None, 
                cavi=False):
