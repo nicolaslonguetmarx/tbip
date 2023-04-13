@@ -150,7 +150,7 @@ def build_input_pipeline(data_dir,
                           dtype=str,
                           delimiter="\n",
                           comments="<!-")
-  return dataset, vocabulary, author_map, num_documents, num_words
+  return dataset, vocabulary, author_map, initial_ideal_points, num_documents, num_words
 
 
 class VariationalFamily(tf.keras.layers.Layer):
