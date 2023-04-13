@@ -269,6 +269,7 @@ class TBIP(tf.keras.Model):
                num_words,
                num_authors,
                num_samples,
+               initial_ideal_points,
                cavi=False,
                fitted_document_shape=None,
                fitted_document_rate=None,
