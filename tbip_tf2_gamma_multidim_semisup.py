@@ -159,10 +159,10 @@ class VariationalFamily(tf.keras.layers.Layer):
   def __init__(self, 
                family, 
                shape, 
-               initial_ideal_points,
                fitted_shape=None, 
                fitted_rate=None, 
-               cavi=False):
+               cavi=False,
+               initial_ideal_points=None):
     """Initialize variational family.
 
     Args:
@@ -320,7 +320,8 @@ class TBIP(tf.keras.Model):
     #nlm: here changed for num_authors, num_topics
     self.ideal_point_distribution = VariationalFamily(
       'normal',
-      [num_authors, num_topics])
+      [num_authors, num_topics],
+      initial_ideal_points=initial_ideal_points)
     
     self.author_verbosity_distribution = VariationalFamily(
       'normal', 
