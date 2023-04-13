@@ -227,7 +227,10 @@ class VariationalFamily(tf.keras.layers.Layer):
     if family == 'normal':
       self.distribution = tfp.distributions.Normal(loc=self.location,
                                                    scale=self.scale)
-      self.prior = tfp.distributions.Normal(loc=self.initial_ideal_points, scale=np.ones(self.initial_ideal_points.shape))
+      if initial_ideal_points is not None:
+        self.prior = tfp.distributions.Normal(loc=self.initial_ideal_points, scale=np.ones(self.initial_ideal_points.shape))
+      else: 
+        self.prior = tfp.distributions.Normal(loc=0., scale=1.)
     elif family == 'lognormal':
       self.distribution = tfp.distributions.LogNormal(loc=self.location,
                                                       scale=self.scale)
