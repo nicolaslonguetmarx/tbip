@@ -222,6 +222,8 @@ class VariationalFamily(tf.keras.layers.Layer):
             tf.ones(shape),
             bijector=tfp.bijectors.Softplus())
 
+    if initial_ideal_points is not None:
+      self.initial_ideal_points = initial_ideal_points
     if family == 'normal':
       self.distribution = tfp.distributions.Normal(loc=self.location,
                                                    scale=self.scale)
