@@ -174,6 +174,7 @@ class VariationalFamily(tf.keras.layers.Layer):
       fitted_rate: The fitted rate parameter from Poisson Factorization.
       cavi: Whether the variational parameters will be maximized with CAVI 
         rather than with gradient descent.
+      initial_ideal_points: The numpy array (S x J) containing the intiial ideal points to be used as priors
     """
     super(VariationalFamily, self).__init__()
     if family in ['normal', 'lognormal']:
@@ -293,6 +294,8 @@ class TBIP(tf.keras.Model):
       num_authors: The number of authors in the corpus.
       num_samples: The number of Monte-Carlo samples to use to approximate the
         ELBO.
+      initial_ideal_points: A numpy array (S x J) containing the initial 
+        ideal points for politicians to be used as priors
       cavi: Whether to perform CAVI updates for the positive variational 
         variables (can only be used if a Gamma variational family is used).
       fitted_document_shape: The fitted document shape parameter from Poisson 
