@@ -638,7 +638,7 @@ class TBIP(tf.keras.Model):
     # We scale to account for the fact that we're only using a minibatch to
     # update the variational parameters of a global latent variable.
     minibatch_scaling = tf.cast(self.num_documents / batch_size, 
-                                tf.dtypes.float64)
+                                tf.dtypes.float32)
     updated_objective_topic_shape = 0.3 + minibatch_scaling * tf.reduce_sum(
       auxiliary_proportions * counts[:, tf.newaxis, :], axis=0)
     expected_document = document_shape / document_rate
