@@ -121,9 +121,9 @@ def build_input_pipeline(data_dir,
   counts = sparse.load_npz(os.path.join(data_dir, "counts.npz"))
   num_documents, num_words = counts.shape
   author_indices = np.load(
-    os.path.join(data_dir, "author_indices.npy")).astype(np.int32)
+    os.path.join(data_dir, "author_indices.npy")).astype(np.int64)
   initial_ideal_points = np.load(
-    os.path.join(data_dir, "initial_ideal_points.npy")).astype(np.int32)
+    os.path.join(data_dir, "initial_ideal_points.npy")).astype(np.int64)
   author_map = np.loadtxt(os.path.join(data_dir, "author_map.txt"),
                           dtype=str,
                           delimiter="\n")
@@ -691,7 +691,7 @@ class TBIP(tf.keras.Model):
     # a convex combination of the previous parameters and the updates. We set
     # the step size to be a decreasing sequence that satisfies the Robbins-
     # Monro condition.
-    step_size = tf.math.pow(tf.cast(step, tf.dtypes.float64) + 1, -0.7)
+    step_size = tf.math.pow(tf.cast(step, tf.dtypes.float32) + 1, -0.7)
     global_objective_topic_shape = (
       step_size * updated_objective_topic_shape + 
       (1 - step_size) * self.objective_topic_distribution.shape)
@@ -919,7 +919,7 @@ def train_step(model, inputs, outputs, optim, seed, step=None):
     # Adjust for the fact that we're only using a minibatch.
     batch_size = tf.shape(outputs)[0]
     count_log_likelihood = count_log_likelihood * tf.dtypes.cast(
-      model.num_documents / batch_size, tf.float64)
+      model.num_documents / batch_size, tf.float32)
     reconstruction_loss = -count_log_likelihood
     total_loss = tf.reduce_mean(reconstruction_loss +
                                 log_prior_loss +
@@ -964,13 +964,13 @@ def main(argv):
   fit_dir = os.path.join(source_dir, "pf-fits")
   if FLAGS.pre_initialize_parameters:
     fitted_document_shape = np.load(
-        os.path.join(fit_dir, "document_shape.npy")).astype(np.float64)
+        os.path.join(fit_dir, "document_shape.npy")).astype(np.float32)
     fitted_document_rate = np.load(
-        os.path.join(fit_dir, "document_rate.npy")).astype(np.float64)
+        os.path.join(fit_dir, "document_rate.npy")).astype(np.float32)
     fitted_topic_shape = np.load(
-        os.path.join(fit_dir, "topic_shape.npy")).astype(np.float64)
+        os.path.join(fit_dir, "topic_shape.npy")).astype(np.float32)
     fitted_topic_rate = np.load(
-        os.path.join(fit_dir, "topic_rate.npy")).astype(np.float64)
+        os.path.join(fit_dir, "topic_rate.npy")).astype(np.float32)
   else:
     fitted_document_shape = None
     fitted_document_rate = None
