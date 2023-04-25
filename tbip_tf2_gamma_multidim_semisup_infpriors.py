@@ -123,7 +123,7 @@ def build_input_pipeline(data_dir,
   author_indices = np.load(
     os.path.join(data_dir, "author_indices.npy")).astype(np.int32)
   initial_ideal_points = np.load(
-    os.path.join(data_dir, "initial_ideal_points.npy")).astype(np.int32)
+    os.path.join(data_dir, "initial_ideal_points.npy"))
   author_map = np.loadtxt(os.path.join(data_dir, "author_map.txt"),
                           dtype=str,
                           delimiter="\n")
@@ -229,7 +229,7 @@ class VariationalFamily(tf.keras.layers.Layer):
       self.distribution = tfp.distributions.Normal(loc=self.location,
                                                    scale=self.scale)
       if initial_ideal_points is not None:
-        self.prior = tfp.distributions.Normal(loc=initial_ideal_points.astype(np.float32), scale=np.ones(initial_ideal_points.shape).astype(np.float32)/10**1)
+        self.prior = tfp.distributions.Normal(loc=initial_ideal_points.astype(np.float32), scale=np.ones(initial_ideal_points.shape).astype(np.float32)/10**4)
       else: 
         self.prior = tfp.distributions.Normal(loc=0., scale=1.)
     elif family == 'lognormal':
