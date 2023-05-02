@@ -767,7 +767,7 @@ class TBIP(tf.keras.Model):
                        ideological_topic_loc +
                        (objective_topic_scale ** 2 +
                         ideological_topic_scale ** 2) / 2)
-    return negative_mean, neutral_mean, positive_mean, ideological_topic_loc, ideological_topic_scale
+    return negative_mean, neutral_mean, positive_mean, ideological_topic_loc, ideological_topic_scale, objective_topic_shape, objective_topic_rate
 
   def get_document_means(self):
     document_shape_np = self.document_distribution.shape
