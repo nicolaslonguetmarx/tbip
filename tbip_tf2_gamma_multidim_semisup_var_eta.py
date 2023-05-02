@@ -181,7 +181,7 @@ class VariationalFamily(tf.keras.layers.Layer):
       cavi: Whether the variational parameters will be maximized with CAVI 
         rather than with gradient descent.
       initial_ideal_points: The numpy array (S x J) containing the initial ideal points to be used as priors
-      variance_priors: The numpy array (S x J) containing the variance of the priors
+      variance_priors: The numpy array (J x S) containing the variance of the priors
     """
     super(VariationalFamily, self).__init__()
     if family in ['normal', 'lognormal']:
@@ -723,7 +723,8 @@ class TBIP(tf.keras.Model):
       global_objective_topic_shape)
     self.objective_topic_distribution.rate.assign(global_objective_topic_rate)
 
-  def get_topic_means(self):
+  # to return also the ideological_topic_loc
+def get_topic_means2(self):
     """Get neutral and ideological topics from variational parameters.
     
     For each (k,v), we want to evaluate E[beta_kv], E[beta_kv * exp(eta_kv)], 
@@ -766,7 +767,7 @@ class TBIP(tf.keras.Model):
                        ideological_topic_loc +
                        (objective_topic_scale ** 2 +
                         ideological_topic_scale ** 2) / 2)
-    return negative_mean, neutral_mean, positive_mean
+    return negative_mean, neutral_mean, positive_mean, ideological_topic_loc, ideological_topic_scale
 
   def get_document_means(self):
     document_shape_np = self.document_distribution.shape
