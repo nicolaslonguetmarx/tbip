@@ -724,7 +724,7 @@ class TBIP(tf.keras.Model):
     self.objective_topic_distribution.rate.assign(global_objective_topic_rate)
 
   # to return also the ideological_topic_loc
-def get_topic_means2(self):
+  def get_topic_means2(self):
     """Get neutral and ideological topics from variational parameters.
     
     For each (k,v), we want to evaluate E[beta_kv], E[beta_kv * exp(eta_kv)], 
